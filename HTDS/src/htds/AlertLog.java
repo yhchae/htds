@@ -3,105 +3,195 @@ package htds;
 import java.sql.Date;
 
 /**
- * 
- * @author Younghun
+ * The AlertLog class is a data member in the Alert class to keep logging information about an Alert object
+ * It records information about 
+ * 1- Who created the alert (i.e. the user who performed the analysis)
+ * 2- when (Date/Time) the alert was created (i.e. populated to the database)
+ * 3- Which data tuples in the database were analyzed to generate the Alert
+ * 4- The AlertProfile used to generate the alert
+ * Once an AlertLog object is created, it can not be modified
+ * @author Qutaiba
  *
  */
 public class AlertLog {
-	private int alertLogID;
-	private int userID;
-	private int dataLogID;
-	private int alertProfileLogID;
-	private Date date;
+	private int alertLogID; //unique id assigned to each AlertLog
+	private int userID; //the id of the user who generated an alert object
+	private int dataLogID; //the id of the data set (a file) which were analyzed to generate an Alert object
+	private int alertProfileID; //the id of an alertProfile used to set the parameters of an alert object
+	private Date date; //the date and time when the alert object was recorded in the database
 	
+	//------------------------- Constructors -----------------------------
 	/**
+	 * @category: Constructor 1 (Basic)
+	 * @param: id: unique integer assigned to each AlertLog
+	 * @param: userID: the unique id of the user who generated the alert object
+	 * @param: dataLogID: the unique integer id for the DataLog of the data set (a file) which were analyzed to generate the alert object
+	 * @param: date: an object of type Date that records the date when the Alert was generated
+	 * @param: alertProfileID: the unique integer id of the alertProfile used to set the parameters of the alert object
 	 * 
 	 */
-	public AlertLog(){
-		this.alertLogID = 0;
-		this.userID = 0;
-		this.dataLogID =  0;
-		this.alertProfileLogID = 0;
-		this.date = null;
+	public AlertLog(int id, int userID, int dataLogID, Date date, int alertProfileID){
+		setAlertLogID(id);
+		setUserID(userID);
+		setDataLogID(dataLogID);
+		setAlertProfileID(alertProfileID);
+		setDate(date);
 	}
 	
 	/**
-	 * 
-	 * @param alertLogID
+	 * @category: Constructor 2
+	 * This constructor is similar to the basic constructor except that an object of type AlertProfile
+	 * is passed instead of an integer referring to the AlertProfile id
+	 * @param: id: unique integer assigned to each AlertLog
+	 * @param: userID: the unique id of the user who generated the alert object
+	 * @param: dataLogID: the unique integer id for the DataLog of the data set (a file) which were analyzed to generate the alert object
+	 * @param: alertProfile: an object of type AlertProfile
+	 * @param: date: an object of type Date that records the date when the Alert was generated
 	 */
-	public void setAlertLogID(int alertLogID){
-		this.alertLogID = alertLogID;
+	public AlertLog(int id, int userID, int dataLogID, Date date, AlertProfile alertProfile){
+		setAlertLogID(id);
+		setUserID(userID);
+		setDataLogID(dataLogID);
+		setAlertProfileID(alertProfile.getAlertProfileID());
+		setDate(date);
+			
+	}
+	/**
+	 * @category: Constructor 3
+	 * @param alertLog: an Object of type AlertLog
+	 * This constructor creates an object of type AlertLog with same properties as the passed AlertLog object
+	 */
+	public AlertLog(AlertLog alertLog){
+		setAlertLogID(alertLog.getAlertLogID());
+		setUserID(alertLog.getUserID());
+		setDataLogID(alertLog.getDataLogID());
+		setAlertProfileID(alertLog.getAlertProfileID());
+		setDate(alertLog.getDate());
+	}
+	/**
+	 * @category: Constructor 4
+	 * This constructor is similar to the basic constructor except that an object of type AlertProfile
+	 * is passed instead of an integer referring to the AlertProfile id
+	 * @param: id: unique integer assigned to each AlertLog
+	 * @param: user: an Object of type User
+	 * @param: dataLog: an Object of type DataLog
+	 * @param: alertProfile: an object of type AlertProfile
+	 * @param: date: an object of type Date that records the date when the Alert was generated
+	 */
+	public AlertLog(int id, User user, DataLog dataLog, Date date, AlertProfile alertProfile){
+		setAlertLogID(id);
+		setUserID(user.getUserID());
+		setDataLogID(dataLog.getDataLogID());
+		setAlertProfileID(alertProfile.getAlertProfileID());
+		setDate(date);
+	}
+   //------------------------- Private Setters -----------------------------
+	
+	// a private function to to check the validity of an id
+	//An id should be an integer of value >=0
+	private boolean isValidID(int id){
+		if(id >=0)
+			return true;
+		return false;
 	}
 	
-	/**
-	 * 
-	 * @param userID
-	 */
-	public void setUserID(int userID){
-		this.userID = userID;
+	//A private function that sets the AlertLog ID to a given integer
+	//should be an integer >=0
+	private void setAlertLogID(int alertLogID){
+		if(isValidID(alertLogID))
+			this.alertLogID = alertLogID;
+		else{
+			System.out.println("ERROR:AlertLog: setAlertLogID: ID should be >=0");
+			this.alertLogID = -1;
+		}
 	}
 	
-	/**
-	 * 
-	 * @param dataLogID
-	 */
-	public void setDataLogID(int dataLogID){
-		this.dataLogID = dataLogID;
+	//A private function that sets the User ID to a given integer
+	//should be an integer >=0
+	private void setUserID(int userID){
+		if(isValidID(userID))
+			this.userID = userID;
+		else{
+			System.out.println("ERROR:AlertLog: setUserID: ID should be >=0");
+			this.userID = -1;
+
+		}
+	}
+
+	// A private function that sets the DataLogID to a given integer
+	// should be an integer >=0
+	private void setDataLogID(int dataLogID){
+		if(isValidID(dataLogID))
+			this.dataLogID = dataLogID;
+		else{
+			System.out.println("ERROR:AlertLog: setDataLogID: ID should be >=0.");
+			this.dataLogID = -1;
+		}
 	}
 	
-	/**
-	 * 
-	 * @param alertProfileLogID
-	 */
-	public void setAlertProfileLogID(int alertProfileLogID){
-		this.alertProfileLogID = alertProfileLogID;
+	// A private function that sets the AlertProfileLogID to a given integer
+	// should be an integer >=0
+	private void setAlertProfileID(int alertProfileID){
+		if(isValidID(alertProfileID))
+			this.alertProfileID = alertProfileID;
+		else{
+			System.out.println("ERROR:AlertLog: setAlertProfileID: ID should be >=0.");
+			this.alertProfileID = -1;
+		}
 	}
 	
-	/**
-	 * 
-	 * @param date
-	 */
-	public void setDate(Date date){
-		this.date = date;
+	//a private function to set the AlertLog date to a given date
+	//The date should not equal to null
+	private void setDate(Date date){
+		if(date == null){
+			System.out.println("ERROR:AlertLog: setDate: The given Date is null");
+			this.date = null;
+		}
+		else
+			this.date = date;
 	}
 	
+	//------------------------- Public Getters  -----------------------------
 	/**
-	 * 
-	 * @return
+	 * @return the id of an AlertLog object
 	 */
 	public int getAlertLogID(){
 		return this.alertLogID;
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * @return the id of the user who created an Alert object
 	 */
 	public int getUserID(){
 		return this.userID;
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * @return the id of the data set (DataLog) from which the Alert was generated
 	 */
 	public int getDataLogID(){
 		return this.dataLogID;
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * @return the id of the AlertProfile used to create the Alert object
 	 */
-	public int getAlertProfileLogID(){
-		return this.alertProfileLogID;
+	public int getAlertProfileID(){
+		return this.alertProfileID;
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * @return the date of when the Alert was generated
 	 */
 	public Date getDate(){
 		return this.date;
+	}
+	
+	//------------------------- Other Functions -----------------------------
+	public void print(){
+		System.out.println("Printing AlertLog Details:");
+		System.out.println("AlertLog ID: "+alertLogID+ " , Created at: "
+				+date.toString()+ " by user id "+userID);
+		System.out.println("DataLog id: "+dataLogID+ " , AlertProfile id: "+ alertProfileID);
 	}
 }
