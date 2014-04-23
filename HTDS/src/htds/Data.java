@@ -10,6 +10,7 @@ public class Data {
 	private String victimName;
 	private String phone;
 	private DataLog dataLog;
+	private int frequency;
 	
 	/**
 	 * Constructor : Initialize the private values.
@@ -19,6 +20,7 @@ public class Data {
 		this.victimName = null;
 		this.phone = null;
 		this.dataLog = null;
+		this.frequency = 0;
 	}
 	
 	/**
@@ -55,6 +57,13 @@ public class Data {
 	
 	/**
 	 * 
+	 * @param frequency
+	 */
+	public void setFrequency(int frequency){
+		this.frequency = frequency;
+	}
+	/**
+	 * 
 	 * @return
 	 */
 	public int getDataID(){
@@ -83,5 +92,13 @@ public class Data {
 	 */
 	public DataLog getDataLog(){
 		return this.dataLog;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public int getFrequency(){
+		return this.frequency;
 	}
 }

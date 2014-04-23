@@ -28,9 +28,10 @@ public class Alert {
 	* @param: log: an AlertLog to keep track of when and how an alert was generated
 	* @param: names: names of victims sharing the same phone number  
 	*/
-	public Alert(int id, String alertColor, String phone, AlertLog log, String[] names){
+	public Alert(int id, String alertColor, int frequency, String phone, AlertLog log, String[] names){
 		setAlertID(id);
 		setColor(alertColor);
+		setFrequency(frequency);
 		setSPN(phone);
 		setAlertLog(log);
 		setVictimNames(names); 
@@ -120,6 +121,18 @@ public class Alert {
 			this.victimNames = victimNames;
 			this.frequency = victimNames.length;
 		}
+	}
+	/**
+	 * 
+	 * @param frequency
+	 */
+	private void setFrequency(int frequency){
+		if(frequency < 0){
+			System.out.println("ERROR:Alert: setAlertLog: The given AleratLog is null");
+			this.frequency = -1;
+		}
+		else
+			this.frequency = frequency;
 	}
 	//------------------------- Public Getters  -----------------------------
 	/**
