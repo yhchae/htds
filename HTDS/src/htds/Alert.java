@@ -78,7 +78,7 @@ public class Alert {
 	private boolean isValidColor(String alertColor){
 		String[] colors = AlertProfile.getColors();
 		for (int i=0;i<colors.length;i++)
-			if(colors[i]== alertColor)
+			if(colors[i].equals(alertColor))
 				return true;
 		return false;
 	}
