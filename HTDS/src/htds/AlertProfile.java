@@ -1,6 +1,4 @@
 package htds;
-import java.sql.Date;
-
 
 /**
  * The AlertProfile class controls how Alert objects are created. 
@@ -14,44 +12,45 @@ import java.sql.Date;
  */
 public class AlertProfile {
 	/*Data Members*/
-	private int alertProfileID; // a unique integer id assigned to each AlertProfile object
-	private AlertProfileLog alertProfileLog; //an AlertProfileLog to keep track of when and how the alert profile was created
-	private String description; //an optional string description
+	private int id; /** a unique integer id assigned to each AlertProfile object*/
+	private AlertProfileLog alertProfileLog; /**an AlertProfileLog to keep track of when and how the alert profile was created*/
+	private String description; /**an optional string description*/
+	/** Severity levels: (1) Severe Risk (2) High Risk (3) Significant Risk (4) General Risk (5) Low Risk*/
 	private final static String[] levels = 
 			new String[]{"Level 1: Severe Risk",
 		                 "Level 2: High Risk", 
 		                 "Level 3: Significant Risk", 
-		                 "Level 4: Ggeneral Risk",
+		                 "Level 4: General Risk",
 						 "Level 5: Low Risk"};
+	/** Five scale color: [Red, Orange, Yellow, Blue, Green]*/
 	private final static String[] colors = 
 			new String[]{	"Red", 
 							"Orange", 
 							"Yellow", 
 							"Blue", 
 							"Green"};
-	private int[] thresholds;
+	private int[] thresholds; /** thresholds defining the bounds of each severity level */
 	//------------------------- Constructors -----------------------------
 	/**
-	 * @category: Constructor 1
+	 * Constructor 1
 	 * @param id: a unique integer id
 	 * @param thresholds: an array of five positive integers
 	 * @param description: a string descriptor, can be set to ""
 	 * @param log: an AlertProfileLog to record logging information
 	 */
 	public AlertProfile(int id, int[] thresholds, String description, AlertProfileLog log){
-		setAlertProfileID(id);
+		setID(id);
 		setThresholds(thresholds);
 		setAlertProfileLog(log);
 		this.description = description;
 	}
 	
 	/**
-	 * @category: Constructor 2
-	 * @param alertProfile: an object of type AlertProfile
 	 * This constructor creates an object of type AlertProfile with same properties as the passed AlertProfile object
+	 * @param alertProfile: an object of type AlertProfile
 	 */
 	public AlertProfile(AlertProfile alertProfile){
-		setAlertProfileID(alertProfile.getAlertProfileID());
+		setID(alertProfile.getID());
 		setThresholds(alertProfile.getThresholds());
 		setAlertProfileLog(alertProfile.getAlertProfileLog());
 		this.description = alertProfile.getDescription();
@@ -68,12 +67,12 @@ public class AlertProfile {
 	
 	//A private function that sets the AlertProfile ID to a given integer
 	//should be an integer >=0
-	private void setAlertProfileID(int alertProfileID){
+	private void setID(int alertProfileID){
 		if(isValidID(alertProfileID))
-			this.alertProfileID = alertProfileID;
+			this.id = alertProfileID;
 		else{
 			System.out.println("ERROR:AlertProfile: setAlertProfileID: ID should be >=0");
-			this.alertProfileID = -1;
+			this.id = -1;
 		}
 	}
 	
@@ -111,8 +110,8 @@ public class AlertProfile {
 	/**
 	 * @return alertProfile ID
 	 */
-	public int getAlertProfileID(){
-		return alertProfileID;
+	public int getID(){
+		return id;
 	}
 	
 	/**
@@ -145,27 +144,13 @@ public class AlertProfile {
 	public AlertProfileLog getAlertProfileLog(){
 		return alertProfileLog;
 	}
-	/**
-	 * @return the id of the user that created this profile
-	 * This is extracted from the AlertProfileLog data member
-	 */
-	public int getUser(){
-		return alertProfileLog.getUserID();
-	}
-	/**
-	 * @return the date at which this AlertProfile was created
-	 * This is extracted from the AlertProfileLog data member
-	 */
-	public Date getDate(){
-		return alertProfileLog.getDate();
-	}
 	
 	/**
 	 * Prints the details of an AlertProfile
 	 */
 	public void print(){
 		System.out.println("Printing AlertProfile Details:");
-		System.out.println("AlertProfile name = "+ description+ " , ID= : "+ getAlertProfileID());
+		System.out.println("AlertProfile name = "+ description+ " , ID= : "+ getID());
 		for(int i=0;i<5;i++)
 			System.out.println(levels[i]+" , Color: "+ colors[i]+ " , Threshold= "+thresholds[i]);
 		alertProfileLog.print();

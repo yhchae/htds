@@ -1,10 +1,21 @@
 package htds;
 
 import java.util.Arrays;
-
+/**
+ * The AlertTest class is used for exhaustive testing of the following classes:
+ * 1- Alert
+ * 2- AlertLog
+ * 3- AlertProfile
+ * 4- AlertProfileLog
+ * @author Qutaiba
+ *
+ */
 public class AlertTest {
 	
 //---------------------------------------------------------------------------
+	/**
+	 * Tests the AlertProfileLog class
+	 */
 	public void testAletProfileLogClass(){
 		System.out.println("######## Start Testing AlertProfileLog Class ########");
 		System.out.println();
@@ -50,7 +61,7 @@ public class AlertTest {
 		AlertProfileLog log7 = AlertRandom.randomAlertProfileLog();
 		log7.print();
 		System.out.println("The following getter outputs should match the above details");
-		System.out.println("AlertProfileLog ID = "+log7.getAlertProfileLogID());
+		System.out.println("AlertProfileLog ID = "+log7.getID());
 		System.out.println("User ID = "+log7.getUserID());
 		System.out.println("Description: "+log7.getDescription());
 		System.out.println("Date = "+ log7.getDate().toString());
@@ -58,6 +69,9 @@ public class AlertTest {
 		System.out.println("######## End Testing AlertProfileLog Class ########");
 	}
 	//--------------------------------------------------------------------------
+	/**
+	 * Tests the AlertProfile Class
+	 */
 	public void testAletProfileClass(){
 		System.out.println("######## Start Testing AlertProfile Class ########");
 		System.out.println();
@@ -102,6 +116,9 @@ public class AlertTest {
 
 	}
 	//---------------------------------------------------------------------------
+	/**
+	 * Tests the AlertLog Class
+	 */
 	public void testAlertLogClass(){
 		System.out.println("######## Start Testing AlertLog Class ########");
 		System.out.println();
@@ -163,7 +180,7 @@ public class AlertTest {
 		AlertLog log9 = AlertRandom.randomAlertLog();
 		log9.print();
 		System.out.println("The following getter outputs should match the above details");
-		System.out.println("AlertLog ID = "+log9.getAlertLogID());
+		System.out.println("AlertLog ID = "+log9.getID());
 		System.out.println("User ID = "+log9.getUserID());
 		System.out.println("DataLog ID "+ log9.getDataLogID());
 		System.out.println("Date = "+ log9.getDate().toString());
@@ -172,6 +189,9 @@ public class AlertTest {
 		System.out.println("######## End Testing AlertLog Class ########");
 	}
 	//---------------------------------------------------------------------------	
+	/**
+	 * Tests the Alert class
+	 */
 	public void testAlertClass(){
 		System.out.println("######## Start Testing Alert Class ########");
 		System.out.println();
@@ -222,7 +242,7 @@ public class AlertTest {
 		Alert alert8 = AlertRandom.randomAlert();
 		alert8.print();
 		System.out.println("The following getter outputs should match the above details");
-		System.out.println("Alert ID = "+alert8.getAlertID());
+		System.out.println("Alert ID = "+alert8.getID());
 		System.out.println("Alert Color = "+ alert8.getColor());
 		System.out.println("Suspect Phone = "+alert8.getSPN());
 		System.out.println("Victim Names: ");
@@ -235,6 +255,10 @@ public class AlertTest {
 		System.out.println("######## End Testing Alert Class ########");
 	}
 	//---------------------------------------------------------------------------
+	/**
+	 * Main function to executes all testing methods in AlertTest class
+	 * @param args: to be left blank
+	 */
 	public static void main(String [ ] args){
 		AlertTest test = new AlertTest();
 		test.testAletProfileLogClass();

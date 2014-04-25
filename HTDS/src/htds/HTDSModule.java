@@ -5,6 +5,12 @@ import java.awt.Toolkit;
 
 import javax.swing.JInternalFrame;
 
+/**
+ * The HTDSModule is a parent class inherited by the four HTDS Modules: Viewer, Uploader, Analyzer and ConfigMgr
+ * It defines utilities/methods shared by these four modules
+ * @author Young
+ *
+ */
 public class HTDSModule extends JInternalFrame {
 	/**
 	 * 
