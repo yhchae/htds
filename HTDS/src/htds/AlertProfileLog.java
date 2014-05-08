@@ -12,10 +12,10 @@ import java.sql.Date;
  * @author Qutaiba
  */
 public class AlertProfileLog {
-	private int id; /** a unique non-negative integer identifying each AlertProfileLog object*/
-	private int userID; /** ID of the user who created an AlertProfile */
-	private String description; /** Brief (string) description of the AlertProfileLog */
-	private Date date; /** date when the AlertProfile was created */
+	private int id;
+	private int userID;
+	private String description;
+	private Date date;
 	
 	/**
 	 * Constructor 1
@@ -90,7 +90,7 @@ public class AlertProfileLog {
 		
 	/**
 	 * a private function to set the AlertLog date to a given date. The date should not equal to null
-	 * @param date: an object of type Date
+	 * @param date
 	 */
 	private void setDate(Date date){
 		if(date == null){
@@ -101,40 +101,39 @@ public class AlertProfileLog {
 			this.date = date;
 	}
 	/**
-	 * 	Get the id of this AlertProfileLog object
-	 * @return: an integer representing the id of this AlertProfile Log
+	 * 	
+	 * @return
 	 */
 	public int getID(){
 		return id;
 	}
 	
 	/**
-	 * This method return the id of the user who created this AlertProfileLog object
-	 * @return user id
+	 * 
+	 * @return
 	 */
 	public int getUserID(){
 		return userID;
 	}
 	
 	/**
-	 * This method returns the description of the AlertPorfileLog object
-	 * @return: a string representing the description of an AlertProfileLog object
+	 * 
+	 * @return
 	 */
 	public String getDescription(){
 		return description;
 	}
 	
 	/**
-	 * This method returns the date of when the AlertProfile was created
-	 * @return: an object of type Date
+	 * 
+	 * @return
 	 */
 	public Date getDate(){
 		return date;
 	}
 	
 	/**
-	 * Prints the details of an AlertProfileLog
-	 * This includes: name, id, date and user id
+	 * 
 	 */
 	public void print(){
 		System.out.println("Printing AlertProfileLog Details:");

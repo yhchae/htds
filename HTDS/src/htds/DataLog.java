@@ -13,10 +13,10 @@ import java.sql.Date;
  */
 
 public class DataLog {
-	private int id; /** a unique integer that identifies each DataLog object*/
-	private int userID; /** the user ID that created a DataLog object */
-	private String fileName; /** A string representing the name of the file used to upload the Data entries */
-	private Date date; /** the Date this DataLog was created*/
+	private int id;
+	private int userID;
+	private String fileName;
+	private Date date;
 	
 	/**
 	 * This constructor creates an object of type DataLog with properties set to values equal to those of the passed arguments
@@ -56,8 +56,8 @@ public class DataLog {
 		setDate(log.getDate());
 	}
 	/**
-	 * A private function that sets the DataLog id to a given integer
-	 * @param logID: 
+	 * 
+	 * @param logID
 	 */
 	private void setID(int logID){
 		if(logID >=0)
@@ -69,8 +69,8 @@ public class DataLog {
 	}
 	
 	/**
-	 *  A private function that sets the userID to a given integer
-	 * @param userID: a non-negative integer
+	 * 
+	 * @param userID
 	 */
 	private void setUserID(int userID){
 		if(userID >=0)
@@ -119,7 +119,7 @@ public class DataLog {
 	}
 	
 	/**
-	 * Get the name of the File that contains the data uploaded to the database in a specific upload activity
+	 * 
 	 * @return: filename uploaded to HTDS associated with this log
 	 */
 	public String getFileName(){
@@ -127,7 +127,7 @@ public class DataLog {
 	}
 	
 	/**
-	 * Returns the date of which the DataLog was created
+	 * 
 	 * @return: the date of creating this log
 	 */
 	public Date getDate(){

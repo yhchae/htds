@@ -1,5 +1,23 @@
 package htds;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JTextField;
+
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+
 /**
  * The UserProfile class is a data structure in the User class that defines the access permissions of the User to the HTDS modules
  * Every User has a UserProfile instance as a data member
@@ -9,10 +27,13 @@ package htds;
  *
  */
 public class UserProfile {
-	private final int MAX_PERMISSIONS = 4; /** number of permissions defined in each user profile. It matches the number of HTDS modules */
-	private int id; /** unique non-negative integer id identifying each user profile object */
-	private String  profileName; /** a string providing an identifying name for the user profile */
-	private boolean[] permissions; /** a boolean matrix representing permissions to the four HTDS modules in the following order: [Viewer, Uploader, Analyzer, ConfigMgr] */ 
+	private final int MAX_PERMISSIONS = 4;
+	
+	private int id;
+	private String  profileName;
+	private boolean[] permissions;
+	
+	
 	
 	/**
 	 * This constructor creates a UserProfile with all properties set to null
@@ -22,9 +43,11 @@ public class UserProfile {
 		this.permissions = new boolean[MAX_PERMISSIONS];
 	}
 	
+
+	
 	/**
 	 * This Constructor creates a userProfile with the given id, but the profileName and permissions are set to null
-	 * @param id: a non-negative integer to be used to set the UserProfile id
+	 * @param id
 	 */
 	public UserProfile(int id){
 		this.id = id;

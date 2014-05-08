@@ -14,8 +14,12 @@ public class User {
 	private String fullName; /**full name of the user*/
 	private String username; /**username to be used during login*/
 	private String password; /**password to be used during login*/
-	private int userProfileID; /**id referring to the userprofile used to specify the access permission to HTDS modules*/
-	
+	private UserProfile userProfile; /**the userprofile used to specify the access permission to HTDS modules*/
+
+	// By YOUNG on 30, April
+	//
+	//private int userProfileID; /**id referring to the userprofile used to specify the access permission to HTDS modules*/
+	//
 	/**
 	 * This constructor creates an object of type User with properties equal to the passed arguments
 	 * @param id: unique id number to identify the user
@@ -29,23 +33,40 @@ public class User {
 		this.fullName = fullName;
 		setUsername(username);
 		this.password = password;
-		this.userProfileID = profile.getID();
+		
+		// By YOUNG on 30, April
+		//
+		//this.userProfileID = profile.getID();
+		//
+		this.userProfile = profile;
 	}
 	
-	/**
+	/*
 	 * This constructor creates an object of type User with properties equal to the passed arguments
 	 * @param id: unique id number to identify the user
 	 * @param fullName: a String for the full name of the user to be used for documentation
 	 * @param username: a String which the user will use to login to HTDS
 	 * @param password: a String which the user will use to login to HTDS
 	 * @param userProfileID: an ID referring to the UserProfile to be used in defining access permissions
-	 */
-	public User(int id, String fullName, String username, String password, int userProfileID){
+	
+	public User(int id, String fullName, String username, String password, int userProfileID){ */
+	/**
+	 * This constructor creates an object of type User with properties equal to the passed arguments
+	 * @param id: unique id number to identify the user
+	 * @param fullName: a String for the full name of the user to be used for documentation
+	 * @param username: a String which the user will use to login to HTDS
+	 * @param password: a String which the user will use to login to HTDS
+	*/
+	public User(int id, String fullName, String username, String password){
 		setID(id);
 		this.fullName = fullName;
 		setUsername(username);
 		this.password = password;
-		this.userProfileID = userProfileID;
+		
+		// By YOUNG on 30, April
+		//
+		//this.userProfileID = userProfileID;
+		//
 	}
 	
 	/**
@@ -57,8 +78,19 @@ public class User {
 		this.fullName = user.getFullName();
 		setUsername(user.getUsername());
 		this.password = user.getPassword();
-		this.userProfileID = user.getUserProfileID();
+		
+		// By YOUNG on 30, April
+		//
+		//this.userProfileID = user.getUserProfileID();
+		//
+		this.userProfile = user.getUserProfile();
 	}
+	public User(String string, String string2, String string3){
+		this.fullName = string;
+		setUsername(string2);
+		this.password = string3;
+	}
+
 	/**
 	 * 
 	 * @param id: a unique id assigned to each alert. 
@@ -100,17 +132,26 @@ public class User {
 	 * 
 	 * @param userProfile: 
 	 */
-	public void setUserProfileID(UserProfile userProfile){
-		this.userProfileID = userProfile.getID();
+	public void setUserProfile(UserProfile userProfile){
+		this.userProfile = userProfile;
 	}
+	// By YOUNG on 30, April
+	//
+	//public void setUserProfileID(UserProfile userProfile){
+	//	this.userProfileID = userProfile.getID();
+	//}
+	//
 	
-	/**
-	 * 
-	 * @param userProfileID: the id of the UserProfile object to be associated with this User object
-	 */
-	public void setUserProfileID(int userProfileID){
-		this.userProfileID = userProfileID;
-	}
+	// By YOUNG on 30, April
+	//
+	///**
+	// * 
+	// * @param userProfileID: the id of the UserProfile object to be associated with this User object
+	// */
+	//public void setUserProfileID(int userProfileID){
+	//	this.userProfileID = userProfileID;
+	//}
+	//
 	
 	/**
 	 * 
@@ -148,9 +189,16 @@ public class User {
 	 * 
 	 * @return: the id of the UserProfile associated with this User object
 	 */
-	public int getUserProfileID(){
-		return userProfileID;
+	public UserProfile getUserProfile(){
+		return userProfile;
 	}
+	
+	// By YOUNG on 30, April
+	//
+	//public int getUserProfileID(){
+	//	return userProfileID;
+	//}
+	//
 	
 	/**
 	 * Prints the details of a User object

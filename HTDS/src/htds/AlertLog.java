@@ -14,11 +14,11 @@ import java.sql.Date;
  *
  */
 public class AlertLog {
-	private int id; /**unique id assigned to each AlertLog*/
-	private int userID; /**the id of the user who generated an alert object*/
-	private int dataLogID; /**the id of the data set (a file) which were analyzed to generate an Alert object*/
-	private int alertProfileID; /**the id of an alertProfile used to set the parameters of an alert object*/
-	private Date date; /**the date and time when the alert object was recorded in the database*/
+	private int id; //unique id assigned to each AlertLog
+	private int userID; //the id of the user who generated an alert object
+	private int dataLogID; //the id of the data set (a file) which were analyzed to generate an Alert object
+	private int alertProfileID; //the id of an alertProfile used to set the parameters of an alert object
+	private Date date; //the date and time when the alert object was recorded in the database
 	
 	//------------------------- Constructors -----------------------------
 	/**
@@ -82,6 +82,11 @@ public class AlertLog {
 		setDataLogID(dataLog.getID());
 		setAlertProfileID(alertProfile.getID());
 		setDate(date);
+	}
+	
+	public AlertLog(int dataLogID, int alertProfileID){
+		setDataLogID(dataLogID);
+		setAlertProfileID(alertProfileID);
 	}
    //------------------------- Private Setters -----------------------------
 	

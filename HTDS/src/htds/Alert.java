@@ -11,13 +11,12 @@ package htds;
  *
  */
 public class Alert {
-	
-	private int id; /** unique id assigned to each alert */
-	private String color; /** color of alert denoting the severity of the alert */
-	private int frequency; /**number of times a suspect phone appears in a data set - should match the number of victimNames*/
-	private String SPN;  /**suspect phone number - String of digits with no formatting*/
-	private AlertLog alertLog; /**an AlertLog to keep track of when and how the alert was created*/
-	private String[] victimNames; /**names of potential victims sharing the same phone number*/
+	private int id; //unique id assigned to each alert
+	private String color; //color of alert denoting the severity of the alert
+	private int frequency; //number of times a suspect phone appears in a data set - should match the number of victimNames
+	private String SPN;  //suspect phone number - String of digits with no formatting
+	private AlertLog alertLog; //an AlertLog to keep track of when and how the alert was created
+	private String[] victimNames; //names of potential victims sharing the same phone number
 	//---------------------------
 	/**
 	 * Constructor
@@ -40,15 +39,15 @@ public class Alert {
 	 * This constructor creates an Alert with ID = 0 and a null AlertLog
 	 * All other properties are set according to the passed arguments. 
 	 * This is to be used by the Analyzer class
-	 * @param alertColor: color of alert denoting the severity of the alert
-	 * @param phone: suspect phone number - string of digits with no formatting
-	 * @param names: names of victims sharing the same phone number
+	 * @param alertColor
+	 * @param phone
+	 * @param names
 	 */
-	public Alert(String alertColor, String phone, String[] names){
+	public Alert(String alertColor, String phone, String[] names, AlertLog alertLog){
 		setID(0);
 		setColor(alertColor);
 		setSPN(phone);
-		alertLog = null;
+		this.alertLog = alertLog;
 		setVictimNames(names); 
 		frequency = names.length;
 	}
@@ -115,7 +114,7 @@ public class Alert {
 	}
 	/**
 	 * removes all formatting from a phone number
-	 * @param phone: a String representing a non-formatted phone number
+	 * @param phone
 	 * @return: a string of digits
 	 */
 	private String formatPhone(String phone){

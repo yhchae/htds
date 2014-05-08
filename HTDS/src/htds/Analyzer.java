@@ -1,40 +1,139 @@
 package htds;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+
 
 /**
- * This class analyzes the data by finding the repeating phone numbers, creating a 
- *	corresponding alert, and uploading all the alerts to the alert database.
+ * 
  * @author Zachary Oliveira
- *	NOTE: WHEN FINAL VERSION IS READY, COMMENT OUT THE HARD-CODED VALUES OF THRESHOLDS FOR ALERTS
- *		  AND UNCOMMENT THE ADDING OF THE ALERTS TO THE ALERT ARRAY, AND UPLOADING THE ALERT 
- *		  ARRAY TO THE DATABASE
+ *
+ *		This class analyzes the data by finding the repeating phone numbers, creating a 
+ *		corresponding alert, and uploading all the alerts to the alert database.
  */
-public class Analyzer extends HTDSModule {
-	private static final long serialVersionUID = 1L;
+public class Analyzer extends HTDSModule implements ActionListener{
 	
-	private DBConnector connector = new DBConnector(); /** HTDS connection to the data base. */
-	/** An array of information uploaded by the agent.
-	 * Each entry in the array holds phone numbers, victim names, id, log id, and a frequency.*/
+	/**
+	 * Our connection to the data base.
+	 */
+	private DBConnector dbConnector = new DBConnector();
+	/**
+	 * An array of information uploaded by the agent.
+	 * Each entry in the array holds phone numbers, victim names, id, log id, and a frequency.
+	 */
 	private Data[] data;
-	/** Contains data that determines the parameters of the alerts we create based on the number of repeats in our data */
+	/**
+	 * Contains data that determines the parameters of the alerts we create based on
+	 * the number of repeats in our data
+	 */
 	private AlertProfile theProfile;
+	/**
+	 * Array of string of Data ID numbers for the user to select from
+	 */
+	private String[] dataIDString;
+	
+	private String[] alertProfileLogString;
+	
+	//GUI fields
+	private JFrame frmHtdstoolsAnalyzer;
+	private JComboBox cmbSelectData;
+	private JComboBox cmbSelectAlertProfileLog;
+	private JButton btnAnalyze;
+	
 
 	/**
-	 * Basic constructor.
+	 * Creates an analyzer
 	 */
 	public Analyzer(){
 		super("HTDS Analyzer");
-		setLocation(20, 20);		// This is an example code.
+		populateDataList();
+		populateAlertProfileLogList();
+		initialize();
+		show();
 	}
+	
+	/**
+	 * Shows the window
+	 */
+	public void show()
+	{
+		frmHtdstoolsAnalyzer.setVisible(true);
+	}
+	
+	/**
+	 * Hides the window
+	 */
+	public void hide()
+	{
+		frmHtdstoolsAnalyzer.setVisible(false);
+	}
+
+	/**
+	 * Fills an array of data log ID numbers that will be added to the combo box
+	 */
+	private void populateDataList()
+	{
+		Data[] data = dbConnector.getData();
+		int[] dataID = new int[data.length];
+		dataIDString = new String[data.length];
+		for(int i = 0; i < data.length; i++)
+		{
+			dataID[i] = data[i].getDataLog().getID();
+			String tempString = Integer.toString(dataID[i]);
+			dataIDString[i] = tempString;
+		}
+	}
+	
+	/**
+	 * Fills an array of alert profile log descriptions that will be added to the combo box
+	 */
+	private void populateAlertProfileLogList()
+	{
+		AlertProfileLog[] alertProfileLog = dbConnector.getAlertProfileLog();
+		alertProfileLogString = new String[alertProfileLog.length];
+		for(int i = 0; i < alertProfileLog.length; i++)
+		{
+			//if(alertProfileLog[i].getDescription() != null)
+				alertProfileLogString[i] = alertProfileLog[i].getDescription();
+		}
+	}
+	
+	/**
+	 * Handles the action when the analyze button is clicked
+	 */
+	public void actionPerformed(ActionEvent e) {
+		Object obj = e.getSource();
+		//if the analyze button was clicked
+		if(obj == btnAnalyze)
+		{
+			String id = (String)cmbSelectData.getSelectedItem(); //get selected item
+			int dataID = Integer.parseInt(id); //convert it to int
+			analyze(dbConnector.getData(dataID)); //analyze the selected data
+		}
+	}
+	
 
 	/**
 	 * The method first sorts the data by putting the phone numbers in ascending order.
 	 * Then, we go through the sorted list to see if there are duplicate phone numbers 
 	 * (all duplicates will be "side-by-side" in the array).
 	 * Then we go through all the duplicate phone numbers and create alerts for each one
-	 * that has more appearances than the minimal amount as listed in the alert profile,
+	 * that has more appeareances than the minimal amount as listed in the alert profile,
 	 * and upload the alerts to the database.
 	 * @param dataArray- the data to be analyzed
+	 * @return- Returns True if the data was analyzed correctly, false if it wasn't.
 	 */
 	public void analyze(Data[] dataArray)
 	{ 
@@ -102,11 +201,29 @@ public class Analyzer extends HTDSModule {
 		//alert profile
 		
 		
-		//find number of alerts
-		//int[] theThresholds = theProfile.getThresholds(); //get the thresholds
-		//JUST FOR TESTING. USE ABOVE LINE NORMALLY^^^^^^
-		int[] theThresholds = {6,5,4,3,2};
-		//JUST FOR TESTING
+		//user needs to choose description in alert profile log, get the corresponding AP ID, 
+		//pass it as parameter in getAlertProfile
+		
+		//get alert profile logs
+		AlertProfileLog[] alertProfileLog = dbConnector.getAlertProfileLog();
+		//get choosen alert profile log description
+		String choosenDescription = cmbSelectAlertProfileLog.getSelectedItem().toString();
+		//find correct log
+		int alertProfileLogLocation = 0;
+		for(alertProfileLogLocation = 0; alertProfileLogLocation < alertProfileLog.length; alertProfileLogLocation++)
+		{
+			if(choosenDescription.equals(alertProfileLog[alertProfileLogLocation].getDescription()))
+				break;
+		}
+		//get ID of the desired log
+		int alertProfileID = alertProfileLog[alertProfileLogLocation].getID();
+		
+		
+		
+		//update the choosen profile
+		theProfile = getAlertProfile(alertProfileID);
+		
+		int[] theThresholds = theProfile.getThresholds(); //get the thresholds
 		
 		int numberOfAlerts = 0; //to know how big to make the alert Array
 		//determine how many alerts we need to make
@@ -117,62 +234,80 @@ public class Analyzer extends HTDSModule {
 		}
 		
 		//stores the alerts
-		Alert[] alerts = new Alert[numberOfAlerts];
-		//number of alerts
-		int alertCounter = 0;
-		//keeps track of where we are in name array
-		int locationInNameArray = 0;
-		//make all the alerts
-		for(int i = 0; i <data.length && numberOfRepeats[i] != 0; i++)
+		if(numberOfAlerts > 0)
 		{
-			
-			if(numberOfRepeats[i] >= theThresholds[4]) //if bigger than smallest risk
+			Alert[] alerts = new Alert[numberOfAlerts];
+			//number of alerts
+			int alertCounter = 0;
+			//keeps track of where we are in name array
+			int locationInNameArray = 0;
+			//make all the alerts
+			for(int i = 0; i <data.length && numberOfRepeats[i] != 0; i++)
 			{
 				
-				//determine the alert color
-				String alertColor = "";
-				if(numberOfRepeats[i] >= theThresholds[0])
-					alertColor = "Red";
-				else if(numberOfRepeats[i] >= theThresholds[1])
-					alertColor = "Orange";
-				else if(numberOfRepeats[i] >= theThresholds[2])
-					alertColor = "Yellow";
-				else if(numberOfRepeats[i] >= theThresholds[3])
-					alertColor = "Blue";
-				else
-					alertColor = "Green";
-				
-				//get the names for this phone number
-				String[] victimNamesForAlert = new String[numberOfRepeats[i]];
-				for(int j = 0; j < victimNamesForAlert.length; j++)
+				if(numberOfRepeats[i] >= theThresholds[4]) //if bigger than smallest risk
 				{
-					victimNamesForAlert[j] = victimNames[locationInNameArray];
-					locationInNameArray++;
+					
+					//determine the alert color
+					String alertColor = "";
+					if(numberOfRepeats[i] >= theThresholds[0])
+						alertColor = "Red";
+					else if(numberOfRepeats[i] >= theThresholds[1])
+						alertColor = "Orange";
+					else if(numberOfRepeats[i] >= theThresholds[2])
+						alertColor = "Yellow";
+					else if(numberOfRepeats[i] >= theThresholds[3])
+						alertColor = "Blue";
+					else
+						alertColor = "Green";
+					
+					//get the names for this phone number
+					String[] victimNamesForAlert = new String[numberOfRepeats[i]];
+					for(int j = 0; j < victimNamesForAlert.length; j++)
+					{
+						victimNamesForAlert[j] = victimNames[locationInNameArray];
+						locationInNameArray++;
+					}
+					
+					System.out.println("The phone number is: " + repeatedPhoneNumbers[i]);
+					System.out.println("The alert color is: " + alertColor);
+					System.out.println("The victim names are:");
+					for(int j = 0; j < victimNamesForAlert.length; j++)
+					{
+						System.out.println(victimNamesForAlert[j]);
+					}
+					
+					//create the alert
+					AlertLog al = new AlertLog(Integer.parseInt(cmbSelectData.getSelectedItem().toString()), alertProfileID);
+					Alert tempAlert = new Alert(alertColor, 
+							Long.toString(repeatedPhoneNumbers[i]), victimNamesForAlert, al);
+					
+					alerts[alertCounter] = tempAlert;
+					alertCounter++;
 				}
-				
-				System.out.println("The phone number is: " + repeatedPhoneNumbers[i]);
-				System.out.println("The alert color is: " + alertColor);
-				System.out.println("The victim names are:");
-				for(int j = 0; j < victimNamesForAlert.length; j++)
-				{
-					System.out.println(victimNamesForAlert[j]);
-				}
-				
-				//create the alert
-				Alert tempAlert = new Alert(alertColor, 
-						Long.toString(repeatedPhoneNumbers[i]), victimNames);
-				
-				alerts[alertCounter] = tempAlert;
-				alertCounter++;
 			}
-			uploadAlert(alerts);
+			if(uploadAlert(alerts))
+			{
+				//display upload successful
+				System.out.println("Alerts uploaded successfully.");
+			}
+			else
+			{
+				//display upload unsuccessful
+				System.out.println("Alerts not uploaded successfully.");
+			}
+		}
+		else
+		{
+			//show screen that says no alert was generated
+			System.out.println("No alert generated.");
 		}
 		
 		//test comments to print out all of the repeating phone numbers 
 		//and how many times it appeared
-		/*System.out.println("phone numbers that appeared more than once: " + repeatedPhoneNumbersCount);
-		System.out.println("Repeated phone numbers:");
-		for(int i = 0; i < data.length && numberOfRepeats[i] != 0; i++)
+		//System.out.println("phone numbers that appeared more than once: " + repeatedPhoneNumbersCount);
+		//System.out.println("Repeated phone numbers:");
+		/*for(int i = 0; i < data.length && numberOfRepeats[i] != 0; i++)
 		{
 			//create alerts
 			System.out.println(repeatedPhoneNumbers[i] + " appeared " + numberOfRepeats[i] + " times.");
@@ -184,9 +319,9 @@ public class Analyzer extends HTDSModule {
 	 * This method uploads an Array of alerts to the database
 	 * @param alertArray-The array of alerts to be uploaded
 	 */
-	public void uploadAlert(Alert[] alertArray)
+	public boolean uploadAlert(Alert[] alertArray)
 	{
-		connector.uploadAlert(alertArray);
+		return dbConnector.uploadAlert(alertArray);
 	}
 
 	/**
@@ -196,8 +331,17 @@ public class Analyzer extends HTDSModule {
 	 */
 	public AlertProfile getAlertProfile(int alertProfileID)
 	{
-		theProfile = connector.getAlertProfile(alertProfileID);
+		theProfile = dbConnector.getAlertProfile(alertProfileID);
 		return theProfile;
+	}
+	
+	/**
+	 * Retrieves an array of alert profile logs from the database
+	 * @return- array of alert profile logs
+	 */
+	public AlertProfileLog[] getAlertProfileLog()
+	{
+		return dbConnector.getAlertProfileLog();
 	}
 	
 	/**
@@ -207,11 +351,59 @@ public class Analyzer extends HTDSModule {
 	 */
 	public Data[] getData(int dataLogID)
 	{
-		data = connector.getAnalysis(dataLogID);
+		data = dbConnector.getAnalysis(dataLogID);
 		return data;
 	}
-
-
+	
+	
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frmHtdstoolsAnalyzer = new JFrame();
+		frmHtdstoolsAnalyzer.setTitle("HTDSTools: Analyzer");
+		frmHtdstoolsAnalyzer.getContentPane().setBackground(Color.WHITE);
+		frmHtdstoolsAnalyzer.setBounds(100, 100, 450, 300);
+		frmHtdstoolsAnalyzer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmHtdstoolsAnalyzer.getContentPane().setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("New label");
+		lblNewLabel.setIcon(new ImageIcon("C:" + File.separator + "Users" + File.separator + "Zachary" + File.separator + "Documents" + File.separator + "eclipse" + File.separator + "JavaFiles" + File.separator + "HTDS" + File.separator + "src" + File.separator + "htds" + File.separator + "image" + File.separator + "analyserpic.png"));
+		lblNewLabel.setBounds(6, 9, 88, 57);
+		frmHtdstoolsAnalyzer.getContentPane().add(lblNewLabel);
+		
+		JLabel lblNewLabel_1 = new JLabel("HTDS ANALYZER");
+		lblNewLabel_1.setForeground(new Color(220, 20, 60));
+		lblNewLabel_1.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 25));
+		lblNewLabel_1.setBounds(106, 12, 226, 42);
+		frmHtdstoolsAnalyzer.getContentPane().add(lblNewLabel_1);
+		
+		JLabel lblSelectData = new JLabel("Select Data");
+		lblSelectData.setForeground(new Color(30, 144, 255));
+		lblSelectData.setBounds(26, 97, 75, 16);
+		frmHtdstoolsAnalyzer.getContentPane().add(lblSelectData);
+		
+		//** combo box to select DataID **//
+		cmbSelectData = new JComboBox(dataIDString);
+		cmbSelectData.setBounds(26, 117, 187, 27);
+		frmHtdstoolsAnalyzer.getContentPane().add(cmbSelectData);
+		
+		JLabel lblSelectAlertProfileLog = new JLabel("Select Alert Profile Log");
+		lblSelectAlertProfileLog.setForeground(new Color(30, 144, 255));
+		lblSelectAlertProfileLog.setBounds(225, 97, 75, 16);
+		frmHtdstoolsAnalyzer.getContentPane().add(lblSelectAlertProfileLog);
+		
+		//** combo box to select DataID **//
+		cmbSelectAlertProfileLog = new JComboBox(alertProfileLogString);
+		cmbSelectAlertProfileLog.setBounds(225, 117, 187, 27);
+		frmHtdstoolsAnalyzer.getContentPane().add(cmbSelectAlertProfileLog);
+		
+		//** Button analyze **//
+		btnAnalyze = new JButton("Analyze");
+		btnAnalyze.setBounds(94, 182, 117, 29);
+		frmHtdstoolsAnalyzer.getContentPane().add(btnAnalyze);
+		btnAnalyze.addActionListener(this);
+	}
 
 	//HELPER METHODS TO SORT
 

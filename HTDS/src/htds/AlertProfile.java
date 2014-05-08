@@ -12,24 +12,22 @@ package htds;
  */
 public class AlertProfile {
 	/*Data Members*/
-	private int id; /** a unique integer id assigned to each AlertProfile object*/
-	private AlertProfileLog alertProfileLog; /**an AlertProfileLog to keep track of when and how the alert profile was created*/
-	private String description; /**an optional string description*/
-	/** Severity levels: (1) Severe Risk (2) High Risk (3) Significant Risk (4) General Risk (5) Low Risk*/
+	private int id; // a unique integer id assigned to each AlertProfile object
+	private AlertProfileLog alertProfileLog; //an AlertProfileLog to keep track of when and how the alert profile was created
+	private String description; //an optional string description
 	private final static String[] levels = 
 			new String[]{"Level 1: Severe Risk",
 		                 "Level 2: High Risk", 
 		                 "Level 3: Significant Risk", 
-		                 "Level 4: General Risk",
+		                 "Level 4: Ggeneral Risk",
 						 "Level 5: Low Risk"};
-	/** Five scale color: [Red, Orange, Yellow, Blue, Green]*/
 	private final static String[] colors = 
 			new String[]{	"Red", 
 							"Orange", 
 							"Yellow", 
 							"Blue", 
 							"Green"};
-	private int[] thresholds; /** thresholds defining the bounds of each severity level */
+	private int[] thresholds;
 	//------------------------- Constructors -----------------------------
 	/**
 	 * Constructor 1
@@ -45,6 +43,11 @@ public class AlertProfile {
 		this.description = description;
 	}
 	
+	public AlertProfile(int id, int[] thresholds, String description){
+		setID(id);
+		setThresholds(thresholds);
+		this.description = description;
+	}
 	/**
 	 * This constructor creates an object of type AlertProfile with same properties as the passed AlertProfile object
 	 * @param alertProfile: an object of type AlertProfile

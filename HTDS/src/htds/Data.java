@@ -8,11 +8,11 @@ package htds;
  * 
  */
 public class Data {
-	private int id; /**a unique integer id that identifies this Data object*/
-	private String name; /**A string representing a potential victim name associated with a phone number*/
-	private String phone; /**A string representing a phone number */
-	private int dataLogID; /**an id referencing the DataLog object associated with this Data object*/
-	private int frequency; /**this will be used only in one specific method: getAnalisys function*/
+	private int id; // a unique integer id that identifies this Data object
+	private String name; // A string representing a potential victim name associated with a phone number
+	private String phone; // A string representing a phone number
+	private DataLog dataLog; // an id referencing the DataLog object associated with this Data object
+	private int frequency; //this will be used only specific case: getAnalisys function
 	
 	/**
 	 * Constructor : Initialize the private values.
@@ -21,7 +21,7 @@ public class Data {
 		setID(0);
 		this.name = null;
 		this.phone = null;
-		this.dataLogID = 0;
+		this.dataLog = null;
 		this.frequency = 0;
 	}
 	
@@ -32,11 +32,11 @@ public class Data {
 	 * @param phone: phone number String
 	 * @param dataLogID: The id of the DataLog associated with this Data object
 	 */
-	public Data(int dataID, String name, String phone, int dataLogID){
+	public Data(int dataID, String name, String phone, DataLog dataLog){
 		setID(dataID);
 		setName(name);
 		setPhone(phone);
-		setDataLogID(dataLogID);
+		setDataLog(dataLog);
 		this.frequency = 0;
 	}
 	/**
@@ -47,13 +47,20 @@ public class Data {
 		setID(data.getID());
 		setName(data.getName());
 		setPhone(data.getPhone());
-		setDataLogID(data.getDataLogID());
+		setDataLog(data.getDataLog());
 		this.frequency = 0;
 	}
 	
+	public Data(int lineCounter, String string, String string2, Object object) {
+		// TODO Auto-generated constructor stub
+		id = lineCounter;
+		name = string;
+		phone = string2;
+	}
+
 	/**
 	 * Set the DataID to a given integer
-	 * @param dataID: an non-negative integer
+	 * @param dataID
 	 */
 	private void setID(int dataID){
 		if(dataID >=0)
@@ -82,7 +89,7 @@ public class Data {
 	
 	/**
 	 * removes all formatting from a phone number
-	 * @param phone: a String representing a non-formatted phone number
+	 * @param phone
 	 * @return: a string of digits
 	 */
 	private String formatPhone(String phone){
@@ -94,19 +101,12 @@ public class Data {
 	 * The given parameter has to be a non-negative integer
 	 * @param dataLogID: set the DataLog Id to the given number
 	 */
-	private void setDataLogID(int dataLogID){
-		if(dataLogID >=0)
-			this.dataLogID = dataLogID;
-		else{
-			this.dataLogID = -1;
-			System.out.println("ERROR:Data:setDataLogID: invalid ID. Should be >= 0");
-		}
+	private void setDataLog(DataLog dataLog){
+		this.dataLog = dataLog;
 	}
 	
 	/**
-	 * This utility function is used by the Analyzer
-	 * It sets a Data object frequency to the given argument
-	 * @param frequency: number of times a number is repeated in a dataset
+	 * 
 	 */
 	public void setFrequency(int frequency){
 		this.frequency = frequency;
@@ -140,8 +140,8 @@ public class Data {
 	 * Return the id of the DataLog object used to store the logging information of this Data object
 	 * @return the id of the DataLog associated with this Data object
 	 */
-	public int getDataLogID(){
-		return this.dataLogID;
+	public DataLog getDataLog(){
+		return this.dataLog;
 	}
 	/**
 	 * prints the details of the Data object
@@ -149,7 +149,7 @@ public class Data {
 	public void print(){
 		System.out.println("Printing Data Details:");
 		System.out.println("ID: "+ getID()+ " Name: " + getName()+ " Phone: "+ getPhone()+
-				", DataLog ID: "+ getDataLogID());
+				", DataLog: "+ getDataLog());
 		System.out.println();
 	}
 }

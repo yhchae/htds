@@ -2,16 +2,15 @@ package htds;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
 
+import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
+import javax.swing.JPanel;
 
-/**
- * The HTDSModule is a parent class inherited by the four HTDS Modules: Viewer, Uploader, Analyzer and ConfigMgr
- * It defines utilities/methods shared by these four modules
- * @author Young
- *
- */
-public class HTDSModule extends JInternalFrame {
+public class HTDSModule implements ActionListener{
 	/**
 	 * 
 	 */
@@ -19,17 +18,15 @@ public class HTDSModule extends JInternalFrame {
 	private String moduleName; 
 	
 	public HTDSModule(String moduleName){
-		super(moduleName, 
-				true,		// resizable 
-				true, 		// closable
-				true, 		// maximizable
-				true);		// iconifiable
-		this.moduleName = moduleName;
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		setSize(screenSize.width - 30, screenSize.height - 100);
 	}
 	
 	public String getModuleName(){
 		return this.moduleName;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
